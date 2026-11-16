@@ -6,6 +6,7 @@ skew-MMR is a merkle tree construction that enables efficient membership proofs 
 - [js](./packages/): Native implementation
 - [circom](./circuits/): Circom verifier gadget
 - [solidity](./contracts/): Solidity accumulator and frontier verifier
+- [lean](./lean/): Lean formalization
 
 ## Benchmarks
 
