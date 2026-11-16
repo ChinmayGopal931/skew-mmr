@@ -1,5 +1,7 @@
 # skew-mmr Lean proofs
 
+> [AI:X](https://0rwx.com/): Lean proofs are authored by LLMs with human guidance. The top-level theorems are reviewed by humans. Lower-level lemmas are not reviewed.
+
 A Lean proof that the skew-MMR inclusion circuit decides what the native verifier decides.
 
 The circuit in [`crates/skew-mmr/src/constraints`](../crates/skew-mmr/src/constraints) is modelled with [lean-ark-r1cs](https://github.com/Robert-MacWha/lean-ark-r1cs). See `SkewMmr.verify_sound` in [`SkewMmr/Proof.lean`](SkewMmr/Proof.lean) for the statement and its assumptions.
