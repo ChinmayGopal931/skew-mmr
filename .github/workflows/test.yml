@@ -1,0 +1,59 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+defaults:
+  run:
+    shell: nix develop -c bash -e {0}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "crates"
+
+      - name: contracts
+        working-directory: contracts
+        run: |
+          pnpm install --frozen-lockfile
+          forge test --nmc LeanImtComparison
+
+      - name: crates
+        working-directory: crates
+        run: cargo test
+
+      - name: packages
+        working-directory: packages
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm typecheck
+          pnpm test
+
+  lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+      - uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "crates"
+
+      - name: mathlib cache
+        working-directory: lean
+        run: lake exe cache get
+
+      - name: lean
+        run: just lean
